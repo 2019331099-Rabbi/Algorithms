@@ -9,43 +9,50 @@
 using namespace std;
 
 /**
-This is the standard code for vanilla BFS. We traverse the graph using
-Breadth First Search.
+This program finds a valid topological ordering.
+If there is no valid order it print -1. Otherwise print a valid order.
 
 Test Case
-7 7
+
+9 10
 1 2
-2 3
-3 1
-1 4
-5 6
+1 8
+2 5
+2 9
+3 4
+4 5
+4 8
+5 7
+5 9
 6 7
-7 5
-2
+
+
 */
 
-int nodes;
+int nodes, indeg[sz];
 vector <int> adj[sz];
 bool vis[sz];
 
-void bfs(int strt)
+void toposort()
 {
-    int u;
+    vector <int> topo;
     queue <int> q;
+    int i, u;
 
-    q.push(strt);
-    vis[strt]=true;
-
+    for (i=1; i<=nodes; i++) if (!indeg[i]) q.push(i), vis[i]=true;
     while (!q.empty()) {
         u=q.front();
-        cout << u << ' ';
         q.pop();
+        topo.push_back(u);
+
         for (auto xx: adj[u]) {
             if (vis[xx]) continue;
-            q.push(xx);
-            vis[xx]=true;
+            indeg[xx]--;
+            if (!indeg[xx]) q.push(xx), vis[xx]=true;
         }
     }
+    if (topo.size()==nodes) for (auto xx: topo) cout << xx << ' ';
+    else cout << -1;
     cout << endl;
 }
 
@@ -59,10 +66,8 @@ int main()
     while (edges--) {
         cin >> u >> v;
         adj[u].push_back(v);
-        adj[v].push_back(u);
+        indeg[v]++;
     }
-    cin >> strt;
-    bfs(strt);
-
+    toposort();
     return 0;
 }
