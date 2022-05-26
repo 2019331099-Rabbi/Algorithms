@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#define ll long long
 #define endl '\n'
 #define PI acos(-1)
 #define sz 100
@@ -25,45 +24,41 @@ shahed
 
 */
 
-void generateLPS(string pattern, int lps[])
+vector <int> generateLPS(string pattern)
 {
-    int i = 0, j = 1, len = pattern.size();
-    
+    int len = pattern.size(), i = 0, j = 1;
+    vector <int> lps(len);
+
     lps[0] = 0;
     while (j < len) {
         if (pattern[i] == pattern[j]) {
             lps[j] = i + 1;
             i++, j++;
-            continue;
         }
-        i--;
-        if (i < 0) {
-            lps[j] = 0;
-            i++, j++;
-            continue;
+        else {
+            if (!i) lps[j] = 0, j++;
+            else i = lps[i - 1];
         }
-        i = lps[i];
     }
+    return lps;
 }
 
 void KMP(string text, string pattern)
 {
-    int lps[pattern.size()], tLen = text.size(), pLen = pattern.size();
-
-    generateLPS(pattern, lps);
-
-    int i = 0, j = 0;//i -> text  j -> pattern
+    vector <int> lps = generateLPS(pattern);
+    
+    int i = 0, j = 0, tlen = text.size(), pLen = pattern.size();
     vector <int> indxPos;
 
-    while (i < tLen) {
+    while (i < tlen) {
         if (text[i] == pattern[j]) i++, j++;
         else {
             if (!j) i++;
-            else j = lps[j-1];
+            else j = lps[j - 1];
         }
         if (j == pLen) {
             indxPos.push_back(i - pLen);
-            j = 0;
+            j = lps[j - 1];
         }
     }
     cout << "pattern position(s) in text:" << endl;
