@@ -9,13 +9,14 @@
 using namespace std;
 
 /**
+<<<<<<< HEAD
+=======
 
+>>>>>>> fdc5c150eede03dfde3fc3aaad25e3e1f0dd56e8
 *** Condition for Topological Sort: The graph must be a DAG.
 This program finds a valid topological ordering.
 If there is no valid order it print -1. Otherwise print a valid order.
-
 Test Case
-
 9 10
 1 2
 1 8
@@ -27,9 +28,8 @@ Test Case
 5 7
 5 9
 6 7
-
-
 */
+
 
 int nodes, indeg[sz];
 vector <int> adj[sz];
