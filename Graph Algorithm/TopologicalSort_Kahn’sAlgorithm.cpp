@@ -9,6 +9,8 @@
 using namespace std;
 
 /**
+
+*** Condition for Topological Sort: The graph must be a DAG.
 This program finds a valid topological ordering.
 If there is no valid order it print -1. Otherwise print a valid order.
 
