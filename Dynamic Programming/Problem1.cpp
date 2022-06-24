@@ -27,7 +27,7 @@ int tiling(int n)
 
 void init()
 {
-    for (int i = 0; i < sz; i++) memo[i] = -1;
+    memset(memo, -1, sizeof(memo));
 }
 
 int main()
