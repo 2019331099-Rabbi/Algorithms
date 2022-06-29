@@ -13,7 +13,7 @@ You are given an array of integers. Find the longest increasing subsequence of t
 Test Cases
 7
 3 4 -1 0 6 2 3
-OutPut: 
+OutPut: 4
 */
 
 int LIS(int n, int arr[])
