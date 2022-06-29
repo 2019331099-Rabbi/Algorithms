@@ -1,1 +1,0 @@
-{"name":"Local: RabinKarp","url":"c:\\Users\\ASUS\\Desktop\\Algorithms\\String Matching Algorithm\\RabinKarp.cpp","tests":[{"id":1653646708878,"input":"ccaccaacdba\ndba","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\ASUS\\Desktop\\Algorithms\\String Matching Algorithm\\RabinKarp.cpp","group":"local","local":true}
