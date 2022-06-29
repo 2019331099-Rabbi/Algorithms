@@ -8,7 +8,7 @@
 using namespace std;
 
 /**
---------------Coin Change Variation 4-------------------
+--------------0/1 knapsack-------------------
 Given weights and profits of n items, put these items in a knapsack of capacity W to get
 the maximum total profit in the knapsack.
 
