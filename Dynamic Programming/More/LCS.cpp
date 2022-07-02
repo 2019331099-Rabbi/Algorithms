@@ -15,6 +15,10 @@ Test Case:
 abcdefghij
 cdgi
 Output: 4
+
+abcdefghij
+ecdgi
+Output: 4
 */
 
 string s1, s2;
