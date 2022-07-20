@@ -26,6 +26,7 @@ void jarvisMarch(int n)
 
     int p = strt, q;
     vector <int> hull;
+
     do
     {
         hull.push_back(p);
@@ -35,30 +36,18 @@ void jarvisMarch(int n)
             if (orientation(points[p], points[q], points[i])) q = i;
         }
         p = q;
-
     } while (p != strt);
-    cout << "Points of Convex Hull in anticlockwise:" << endl;
     for (auto xx: hull) cout << points[xx].x << ' ' << points[xx].y << endl;
 }
+
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
     int n;
-    
+
     cin >> n;
     for (int i = 0; i < n; i++) cin >> points[i].x >> points[i].y;
     jarvisMarch(n);
     return 0;
 }
-/*
-8
-0 3
-1 2
-1 1
-0 0
-3 3
-2 2
-3 1
-4 4
-*/

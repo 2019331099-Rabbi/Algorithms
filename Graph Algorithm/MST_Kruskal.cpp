@@ -65,10 +65,10 @@ void mst_kruskal()
         v=pq.top().second.second;
         pq.pop();
 
-        u=find_set(u);
-        v=find_set(v);
-        if (u==v) continue;
-        union_set(u, v);
+        int p=find_set(u);
+        int q=find_set(v);
+        if (p==q) continue;
+        union_set(p, q);
         ans.push_back({w, {u, v}});
     }
 }

@@ -54,16 +54,16 @@ void RabinCarp(string& text, string& pattern)
     }
 
     for (int i = 0; i <= tlen - pLen; i++) {
+        cout << curHash << ' ' << pHash << endl;
+
         if (curHash == pHash) indxPos.push_back(i);
 
         int hVal = text[i] - 'a' + 1;
         curHash = curHash - (hVal * power[pLen - 1]) % p;
-
         curHash = (curHash * c) % p;
         
         hVal = text[i + pLen] - 'a' + 1;
         curHash = (curHash + (hVal * power[0]) % p) % p;
-
         if (curHash < 0) curHash += p;
     }
 
