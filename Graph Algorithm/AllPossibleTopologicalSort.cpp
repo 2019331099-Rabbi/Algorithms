@@ -27,6 +27,7 @@ void allPossibleTopoSort(vector <int> res, int indeg[], bool vis[])
     if (res.size() == nodes) {
         for (auto xx: res) cout << xx << ' ';
         cout << endl;
+        return;
     }
     for (int i = 1; i <= nodes; i++) {
         if (!indeg[i] and !vis[i]) {

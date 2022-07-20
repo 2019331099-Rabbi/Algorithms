@@ -12,9 +12,9 @@ vector <int> adj[sz];
 int low[sz], dt[sz], parent[sz], timer;
 bool isAP[sz];
 
-void init()
+void init(int nodes)
 {
-    for (int i = 0; i < sz; i++) low[i] = dt[i] = parent[i] = -1;
+    for (int i = 1; i < sz; i++) low[i] = dt[i] = parent[i] = -1;
 }
 
 void dfs(int strt)
@@ -29,7 +29,7 @@ void dfs(int strt)
             dfs(xx);
             low[strt] = min(low[strt], low[xx]);
             if (parent[xx] == -1 && child > 1) isAP[strt] = true;
-            else if (parent[xx] != -1 && low[xx] >= dt[strt]) isAP[strt] = true;
+            else if (parent[xx] != -1 && low[xx] > dt[strt]) isAP[strt] = true;
         }
         else if (xx != parent[strt]) low[strt] = min(low[strt], dt[xx]);
     }
@@ -37,11 +37,11 @@ void dfs(int strt)
 
 void ArticulationPointTarjan(int nodes)
 {
-    init();
-    for (int i = 0; i < nodes; i++) {
+    init(nodes);
+    for (int i = 1; i <= nodes; i++) {
         if (dt[i] == -1) dfs(i);
     }
-    for (int i = 0; i < nodes; i++) {
+    for (int i = 1; i <= nodes; i++) {
         if (isAP[i]) cout << i << ' ';
     }
     cout << endl;

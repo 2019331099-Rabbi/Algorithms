@@ -29,7 +29,6 @@ Test Case
 
 int nodes, indeg[sz];
 vector <int> adj[sz];
-bool vis[sz];
 
 void toposort()
 {
@@ -37,16 +36,15 @@ void toposort()
     queue <int> q;
     int i, u;
 
-    for (i=1; i<=nodes; i++) if (!indeg[i]) q.push(i), vis[i]=true;
+    for (i=1; i<=nodes; i++) if (!indeg[i]) q.push(i);
     while (!q.empty()) {
         u=q.front();
         q.pop();
         topo.push_back(u);
 
         for (auto xx: adj[u]) {
-            if (vis[xx]) continue;
             indeg[xx]--;
-            if (!indeg[xx]) q.push(xx), vis[xx]=true;
+            if (!indeg[xx]) q.push(xx);
         }
     }
     if (topo.size()==nodes) for (auto xx: topo) cout << xx << ' ';

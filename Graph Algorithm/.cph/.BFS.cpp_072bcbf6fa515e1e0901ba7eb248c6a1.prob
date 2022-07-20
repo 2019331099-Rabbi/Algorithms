@@ -1,0 +1,1 @@
+{"name":"Local: BFS","url":"c:\\Users\\ASUS\\Desktop\\GitHub\\Algorithms\\Graph Algorithm\\BFS.cpp","tests":[{"id":1658282299444,"input":"7 7\n1 2\n2 3\n3 1\n1 4\n5 6\n6 7\n7 5\n2","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\ASUS\\Desktop\\GitHub\\Algorithms\\Graph Algorithm\\BFS.cpp","group":"local","local":true}

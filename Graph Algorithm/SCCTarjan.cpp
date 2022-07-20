@@ -15,7 +15,7 @@ stack <int> stk;
 
 void init(int nodes)
 {
-    for (int i = 0; i <= nodes; i++) dt[i] = low[i] = -1;
+    for (int i = 1; i <= nodes; i++) dt[i] = low[i] = -1;
 }
 
 void dfs(int strt)
@@ -48,7 +48,7 @@ void dfs(int strt)
 int tarjan(int nodes)
 {
     init(nodes);
-    for (int i = 0; i < nodes; i++) {
+    for (int i = 1; i <= nodes; i++) {
         if (dt[i] == -1) dfs(i);
     }
 }
@@ -68,11 +68,11 @@ int main()
 }
 /**
 7 9
-0 1
+7 1
 1 2
 1 3
 3 4
-4 0
+4 7
 4 5
 4 6
 5 6
