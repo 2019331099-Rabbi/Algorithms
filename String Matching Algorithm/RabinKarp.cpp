@@ -27,7 +27,7 @@ shahed
 
 */
 
-int power[sz];
+int64_t power[sz];
 
 void generatePower()
 {
@@ -37,24 +37,24 @@ void generatePower()
 
 void RabinCarp(string& text, string& pattern)
 {
-    int tlen, pLen, pHash;
+    int tlen, pLen;
     vector <int> indxPos;
 
-    tlen = text.size(), pLen = pattern.size(), pHash = 0;
+    tlen = text.size(), pLen = pattern.size();
+    int64_t pHash = 0;
 
     for (int i = 0; i < pLen; i++) {
         int hVal = pattern[i] - 'a' + 1;
         pHash = (pHash + hVal * power[pLen - i - 1]) % p;
     }
 
-    int curHash = 0;
+    int64_t curHash = 0;
     for (int i = 0; i < pLen; i++) {
         int hVal = text[i] - 'a' + 1;
         curHash = (curHash + hVal * power[pLen - i - 1]) % p;
     }
 
     for (int i = 0; i <= tlen - pLen; i++) {
-        cout << curHash << ' ' << pHash << endl;
 
         if (curHash == pHash) indxPos.push_back(i);
 

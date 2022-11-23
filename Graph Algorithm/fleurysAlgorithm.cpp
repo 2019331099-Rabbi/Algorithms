@@ -2,7 +2,7 @@
 #define ll long long
 #define endl '\n'
 #define PI acos(-1)
-#define sz 3001
+#define sz 100
 #define inf 1e9
 #define mod 1000000007
 #define RUN_FAST ios::sync_with_stdio(false);
@@ -11,11 +11,21 @@ using namespace std;
 bool adj[sz][sz];
 int deg[sz];
 
+void addEdge(int u, int v)
+{
+    adj[u][v] = adj[v][u] = true;
+}
+
+void deleteEdge(int u, int v)
+{
+    adj[u][v] = adj[v][u] = false;
+}
+
 bool isPossible(int nodes)
 {
     int cnt = 0;
     for (int i = 0; i < nodes; i++) if (deg[i] & 1) cnt++;
-    return cnt == 2 || cnt == 0;
+    return cnt == 0 || cnt == 2;
 }
 
 int findSource(int nodes)
@@ -26,19 +36,19 @@ int findSource(int nodes)
 
 int bfs(int strt, int nodes)
 {
-    bool vis[nodes] = {false};
+    bool vis[nodes + 1] = {false};
     queue <int> q;
-    
+
     q.push(strt);
     vis[strt] = true;
-    int cnt = 0;
 
+    int cnt = 0;
     while (!q.empty()) {
         int u = q.front();
         cnt++;
         q.pop();
         for (int i = 0; i < nodes; i++) {
-            if (!adj[u][i] || vis[i]) continue;
+            if (vis[i] || !adj[u][i]) continue;
             q.push(i);
             vis[i] = true;
         }
@@ -49,20 +59,20 @@ int bfs(int strt, int nodes)
 bool isBridge(int u, int v, int nodes)
 {
     int cnt1 = bfs(u, nodes);
-    adj[u][v] = adj[v][u] = false;
-    int cnt2 = bfs(u, nodes);
+    deleteEdge(u, v);
+    int cntt2 = bfs(u, nodes);
+    addEdge(u, v);
 
-    adj[u][v] = adj[v][u] = true;
-    return cnt1 != cnt2;
+    return cnt1 != cntt2;
 }
 
-void fleury(int nodes, int edges)
+void fleury(int nodes)
 {
     vector <pair <int, int>> path;
-    int u, v1, v2, cnt = 0;
+    int u, v1, v2;
 
     u = findSource(nodes);
-    cout << bfs(u, nodes) << endl;
+    
     while (true) {
         v1 = v2 = -1;
         for (int i = 0; i < nodes; i++) {
@@ -77,32 +87,78 @@ void fleury(int nodes, int edges)
 
         if (v2 < 0) {
             path.push_back({u, v1});
-            adj[u][v1] = adj[v1][u] = false;
+            deleteEdge(u, v1);
             u = v1;
         }
         else {
             path.push_back({u, v2});
-            adj[u][v2] = adj[v2][u] = false;
+            deleteEdge(u, v2);
             u = v2;
         }
+        
     }
     for (auto xx: path) cout << xx.first << "->" << xx.second << endl;
     cout << endl;
+
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    int nodes, edges;
+    int nodes, edges, u, v;
 
     cin >> nodes >> edges;
     for (int i = 0; i < edges; i++) {
-        int u, v;
         cin >> u >> v;
-        adj[u][v] = adj[v][u] = true;
+        addEdge(u, v);
         deg[u]++, deg[v]++;
     }
-    if (isPossible(nodes)) fleury(nodes, edges);
-    else cout << "Eular path not possible" << endl;
+    if (isPossible(nodes)) fleury(nodes);
+    else cout << "Euler cicuit or path not possible" << endl;
     return 0;
 }
+/**
+9 13
+0 1
+1 2
+1 5
+5 2
+3 2
+2 4
+3 4
+3 8
+3 6
+4 6
+4 7
+8 6
+6 7
+
+Output:
+0->1
+1->2
+2->3
+3->4
+4->6
+6->3
+3->8
+8->6
+6->7
+7->4
+4->2
+2->5
+5->1
+
+5 5
+4 3
+0 1
+1 2
+4 0
+2 3
+
+Output:
+0->1
+1->2
+2->3
+3->4
+4->0
+*/

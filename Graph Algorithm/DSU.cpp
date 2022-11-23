@@ -13,7 +13,6 @@ This program finds the total number of components in a given undirected graph
 using DSU.
 
 Test cases
-
 7 6
 1 2
 6 1
@@ -21,7 +20,6 @@ Test cases
 3 7
 5 1
 6 5
-
 */
 
 int nodes, par[sz];
