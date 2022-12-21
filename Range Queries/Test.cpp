@@ -7,12 +7,39 @@
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
+/*
+Problem link: https://cses.fi/problemset/task/1651/
+*/
+
 struct info
 {
     int64_t sum, prop;
 }tree[sz * 3];
-
 int64_t arr[sz];
+
+void push(int node, int l, int r)
+{
+    if (tree[node].prop == 0) return;
+
+    tree[node].sum += (r - l + 1) * tree[node].prop;
+    if (l != r) {
+        tree[node * 2].prop += tree[node].prop;
+        tree[node * 2 + 1].prop += tree[node].prop;
+    }
+    tree[node].prop = 0;
+}
+
+int64_t combine(int64_t lcResult, int64_t rcResult)
+{
+    return lcResult + rcResult;
+}
+
+void pull(int node)
+{
+    int a = node << 1;//Left child: node * 2
+    int b = (node << 1) | 1;//Right child: (node * 2) + 1
+    tree[node].sum = combine(tree[a].sum, tree[b].sum);
+}
 
 void init(int node, int l, int r)
 {
@@ -27,26 +54,7 @@ void init(int node, int l, int r)
 
     init(a, l, m);
     init(b, m + 1, r);
-    tree[node].sum = tree[a].sum + tree[b].sum;
-}
-
-void push(int node, int l, int r)
-{
-    if (tree[node].prop == 0) return;
-
-    tree[node].sum += (r - l + 1) * tree[node].prop;
-    if (l != r) {
-        tree[node * 2].prop += tree[node].prop;
-        tree[node * 2 + 1].prop += tree[node].prop;
-    }
-    tree[node].prop = 0;
-}
-
-void pull(int node)
-{
-    int a = node << 1;//Left child: node * 2
-    int b = (node << 1) | 1;//Right child: (node * 2) + 1
-    tree[node].sum = tree[a].sum + tree[b].sum;
+    tree[node].sum = combine(tree[a].sum, tree[b].sum);
 }
 
 void update(int node, int l, int r, int x, int y, int64_t val)
@@ -72,12 +80,6 @@ void update(int node, int l, int r, int x, int y, int64_t val)
     update(a, l, m, x, y, val);
     update(b, m + 1, r, x, y, val);
     pull(node);//Update the node with it's left child and right child
-    
-}
-
-int64_t combine(int64_t lcResult, int64_t rcResult)
-{
-    return lcResult + rcResult;
 }
 
 int64_t query(int node, int l, int r, int x, int y)
@@ -92,7 +94,6 @@ int64_t query(int node, int l, int r, int x, int y)
     return combine(query(a, l, m, x, y), query(b, m + 1, r, x, y));
     //Combine the left child and right child result
 }
-
 
 int main()
 {
