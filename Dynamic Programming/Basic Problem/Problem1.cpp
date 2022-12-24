@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #define endl '\n'
 #define PI acos(-1)
-#define sz 26
+#define sz 104
 #define inf 1e9 + 9
 #define mod 1000000007
 #define RUN_FAST ios::sync_with_stdio(false);
@@ -16,13 +16,13 @@ Recurrence relation: f(n) = f(n - 1) + f(n - 2);
 base case: f(1) = 1, f(2) = 2;
 */
 
-int memo[sz];
+int64_t memo[sz];
 
-int tiling(int n)
+int64_t tiling(int cur)
 {
-    if (n <= 2) return n;
-    if (memo[n] != -1) return memo[n];
-    return memo[n] = tiling(n - 1) + tiling(n - 2);
+    if (cur <= 2) return cur;
+    if (memo[cur] != -1) return memo[cur];
+    return memo[cur] = tiling(cur - 1) + tiling(cur - 2);
 }
 
 void init()
@@ -35,9 +35,7 @@ int main()
     RUN_FAST; cin.tie(nullptr);
     init();
 
-    int n;
-    cin >> n;
-    cout << tiling(n) << endl;
+    for (int i = 1; i <= 10; i++) cout << i << ' ' << tiling(i) << endl;
 
     return 0;
 }

@@ -1,39 +1,49 @@
 #include <bits/stdc++.h>
 #define endl '\n'
 #define PI acos(-1)
-#define sz 1000
+#define sz 104
 #define inf 1e9 + 9
 #define mod 1000000007
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
-string A, B;
-int x, memo[10][2][90];
+vector <pair <pair <int, int>, int>> task;
+int n;
 
-int dp(int pos, int isSmall, int digitSum, string &str)
+int upperBound(int val)
 {
-    if (pos == str.size()) return digitSum == x;
-    if (memo[pos][isSmall][digitSum] != -1) return memo[pos][isSmall][digitSum];
+    int low = 0, high = n, ans = n;
 
-    int ans = 0, lim = str[pos] - '0';
-    if (isSmall) lim = 9;
-    for (int i = 0; i <= lim; i++) {
-        int newIsSmall = isSmall | (i < lim);
-        ans += dp(pos + 1, newIsSmall, digitSum + i, str);
+    while (low <= high) {
+        int mid = (low + high) >> 1;
+        if (task[mid].first.first <= val) low = mid + 1;
+        else ans = mid, high = mid - 1;
     }
-    return memo[pos][isSmall][digitSum] = ans;
+    return ans;
 }
 
-void init()
+int maxProfit(int cur)
 {
-    memset(memo, -1, sizeof(memo));
+    if (cur >= n) return 0;
+
+    int p1 = maxProfit(cur + 1);
+    int p2 = task[cur].second + maxProfit(upperBound(task[cur].first.second));
+    return max(p1, p2);
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    init();
 
-    cin >> A >> B >> x;
-    cout << dp(0, 0, 0, B) << endl;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        int s, f, p;
+        cin >> s >> f >> p;
+        task.push_back({{s, f}, p});
+    }
+    sort(task.begin(), task.end());
+    for (auto xx: task) cout << xx.first.first << ' ' << xx.first.second << ' ' << xx.second << endl;
+
+    cout << "Max Profit = " << maxProfit(0) << endl;
+    return 0;
 }

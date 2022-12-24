@@ -16,29 +16,25 @@ Recurrence relation: f(n) = f(n - 1) + 2 * f(n - 2);
 base case: f(1) = 1, f(2) = 3;
 */
 
-int memo[sz];
+int64_t memo[sz];
 
-int tiling(int n)
+int64_t tiling(int cur)
 {
-    if (n == 1) return 1;
-    if (n == 2) return 3;
-    if (memo[n] != -1) return memo[n];
-    return memo[n] = tiling(n - 1) + 2 * tiling(n - 2);
+    if (cur == 1) return 1;
+    if (cur == 2) return 3;
+    if (memo[cur] != -1) return memo[cur];
+    return memo[cur] = tiling(cur - 1) + 2 * tiling(cur - 2);
 }
 
 void init()
 {
-   memset(memo, -1, sizeof(memo));
+    memset(memo, -1, sizeof(memo));
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
     init();
-
-    int n;
-    cin >> n;
-    cout << tiling(n) << endl;
-
+    for (int i = 1; i <= 10; i++) cout << i << ' ' << tiling(i) << endl;
     return 0;
 }

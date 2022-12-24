@@ -18,19 +18,23 @@ Test Case
 7 10 1 -2 3
 Output = 13
 */
-int arr[sz], memo[sz];
-int n;
 
-int maxSum(int cur)
-{
-    if (cur >= n) return 0;
-    if (memo[cur] != -1) return memo[cur];
-    return  memo[cur] = max(arr[cur] + maxSum(cur + 2), maxSum(cur + 1));
-}
+int64_t memo[sz], arr[sz];
+//0 based indexing
 
 void init()
 {
     memset(memo, -1, sizeof(memo));
+}
+
+int64_t maxSum(int cur)
+{
+    if (cur < 0) return 0;
+    if (memo[cur] != -1) return memo[cur];
+    
+    int64_t val1 = arr[cur] + maxSum(cur - 2);
+    int64_t val2 = maxSum(cur - 1);
+    return memo[cur] = max(val1, val2);
 }
 
 int main()
@@ -38,9 +42,9 @@ int main()
     RUN_FAST; cin.tie(nullptr);
     init();
 
+    int n;
     cin >> n;
     for (int i = 0; i < n; i++) cin >> arr[i];
-    cout << maxSum(0) << endl;
-
+    cout << maxSum(n - 1) << endl;
     return 0;
 }

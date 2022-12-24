@@ -18,7 +18,7 @@ NB: Can take two consequtive numbers.
 Test Case
 5
 3 1 -1 100 2
-Output = 104
+Output = 100
 */
 int arr[sz], memo[sz][2];
 int n;

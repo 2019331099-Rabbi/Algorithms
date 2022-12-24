@@ -9,7 +9,7 @@ using namespace std;
 
 /**
 ********** Problem 8 ************
-You are given N tasks. Each task has a starting time, finishing time ans profit. You can
+You are given N tasks. Each task has a starting time, finishing time and a profit. You can
 do any number of non-overlapping tasks and get the profit associated with them. Your goal
 is to maximize total profit.
 
@@ -35,7 +35,7 @@ int upperBound(int cur)
     if (x < tasks[0].first.first) return 0;
 
     while (left <= right) {
-        mid = (left + right) / 2;
+        mid = (left + right) >> 1;
         if (tasks[mid].first.first > x) {
             ans = mid, right = mid - 1;
         }
