@@ -21,7 +21,6 @@ For more details visit https://www.geeksforgeeks.org/count-palindromic-subsequen
 */
 
 int64_t memo[sz][sz];
-int len;
 string s;
 
 int64_t dp(int left, int right)
@@ -46,10 +45,9 @@ void init()
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    cin >> s;
-    len = s.size();
     init();
-    cout <<  dp(0, len - 1) << endl;
 
+    cin >> s;
+    cout <<  dp(0, s.size() - 1) << endl;
     return 0;
 }

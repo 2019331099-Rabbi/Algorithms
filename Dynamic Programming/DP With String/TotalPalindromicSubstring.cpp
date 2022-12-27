@@ -8,8 +8,9 @@
 using namespace std;
 
 /**
-********** Problem 8 ************
-You have given a string. Find the longest substring that is a palindrome.
+********** Problem ************
+You have given a string. Find the total number of palindromic substring of length
+al least 2.
 
 Test Case:
 abaab
@@ -18,8 +19,6 @@ Output: 3
 abbaeae
 Output: 4
 */
-
-
 int memo[sz][sz];
 string s;
 
@@ -37,7 +36,7 @@ int isPalindrome(int l, int r)
     else return memo[l][r] = 0;
 }
 
-int TotalPalindromicSubstring()
+int TotalPS()
 {
     int len = s.size(), ans = 0;
     for (int i = 0; i < len; i++) {
@@ -52,8 +51,6 @@ int main()
     init();
 
     cin >> s;
-    int ans = TotalPalindromicSubstring();
-    cout << "Total palindromic substring = " << ans << endl;
-
+    cout << "Total palindromic substring = " << TotalPS() << endl;
     return 0;
 }

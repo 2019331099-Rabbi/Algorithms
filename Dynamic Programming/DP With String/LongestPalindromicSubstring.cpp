@@ -7,17 +7,19 @@
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
-/**
-********** Problem 8 ************
+/*
+********** Problem ************
 You have given a string. Find the longest substring that is a palindrome.
-
 Test Case:
 abccbcca
 Output: 5
 */
 
-
 int memo[sz][sz];
+/*
+memo[i][j] = 1, if the substring [i, j] is a palindrome
+memo[i][j] = 0, if the substring [i, j] is not a palindrome
+*/
 string s;
 
 void init()
@@ -29,9 +31,7 @@ int isPalindrome(int l, int r)
 {
     if (l >= r) return 1;
     if (memo[l][r] != -1) return memo[l][r];
-
-    if (s[l] == s[r]) return memo[l][r] = isPalindrome(l + 1, r - 1);
-    else return memo[l][r] = 0;
+    return memo[l][r] = (s[l] == s[r])?isPalindrome(l + 1, r - 1):0;
 }
 
 pair <int, int> longestPalindromicSubstring()

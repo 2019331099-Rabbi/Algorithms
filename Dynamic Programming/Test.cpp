@@ -1,49 +1,50 @@
 #include <bits/stdc++.h>
 #define endl '\n'
 #define PI acos(-1)
-#define sz 104
+#define sz 12
 #define inf 1e9 + 9
 #define mod 1000000007
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
-vector <pair <pair <int, int>, int>> task;
-int n;
+/**
+Given A and B. If we write from A to B, how many zeroes will be write down?
+1 <= A <= B <= 1000000000
+*/
 
-int upperBound(int val)
+int dp2(int pos, int isSmall, string &str)
 {
-    int low = 0, high = n, ans = n;
-
-    while (low <= high) {
-        int mid = (low + high) >> 1;
-        if (task[mid].first.first <= val) low = mid + 1;
-        else ans = mid, high = mid - 1;
-    }
+    if (pos == str.size()) return 1;
+    
+    int ans = 0;
+    int lim = (isSmall)?(9):(str[pos] - '0');
+    for (int i = 0; i <= lim; i++) ans += dp2(pos + 1, isSmall | (i < lim), str);
     return ans;
 }
 
-int maxProfit(int cur)
+int dp1(int pos, int hasStarted, int isSmall, string &str)
 {
-    if (cur >= n) return 0;
-
-    int p1 = maxProfit(cur + 1);
-    int p2 = task[cur].second + maxProfit(upperBound(task[cur].first.second));
-    return max(p1, p2);
+    if (pos == str.size()) return 0;
+    
+    int lim = (isSmall)?(9):(str[pos] - '0');
+    int ans = 0;
+    for (int i = 0; i <= lim; i++) {
+        ans += dp1(pos + 1, hasStarted | (i != 0), isSmall | (i < lim), str);
+        if (hasStarted && !i) ans += dp2(pos + 1, isSmall | (i < lim), str);
+    }
+    return ans;
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
+    string a, b;
+    cin >> a >> b;
 
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        int s, f, p;
-        cin >> s >> f >> p;
-        task.push_back({{s, f}, p});
-    }
-    sort(task.begin(), task.end());
-    for (auto xx: task) cout << xx.first.first << ' ' << xx.first.second << ' ' << xx.second << endl;
-
-    cout << "Max Profit = " << maxProfit(0) << endl;
+    cout << dp1(0, 0, 0, b) << endl;
+    a = to_string(stoi(a) - 1);
+    cout << dp1(0, 0, 0, a) << endl;
     return 0;
+
+
 }

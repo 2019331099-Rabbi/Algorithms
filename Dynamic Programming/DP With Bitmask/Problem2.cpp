@@ -9,7 +9,7 @@ using namespace std;
 
 /**
 Given a string S(Only digits) and an integer D. How many permutation of S is divisible by D?
-Assum that, length of S <= 10 and 1 <= D <= 1000.All digits of S are unique.
+Assum that, |S| <= 10 and 1 <= D <= 1000.All digits of S are unique.
 */
 
 int d, memo[1 << 10][sz];
