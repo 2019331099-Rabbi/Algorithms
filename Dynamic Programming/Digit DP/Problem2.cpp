@@ -10,15 +10,16 @@ using namespace std;
 /**
 Given A and B. If we write from A to B, how many zeroes will be write down?
 1 <= A <= B <= 1000000000
-*/
 
-string A, B;
+To solve the problem, we use the following concept here-
+g[A, B] = f(B) - f(A - 1)
+*/
 int memo1[10][2][2], memo2[10][2];
 
 int dp2(int pos, int isSmall, string &str)
 {
     if (pos == str.size()) return 1;
-    if (memo2[pos][isSmall]) return memo2[pos][isSmall];
+    if (memo2[pos][isSmall] != -1) return memo2[pos][isSmall];
 
     int ans = 0, lim = str[pos] - '0';
     if (isSmall) lim = 9;
@@ -32,11 +33,10 @@ int dp1(int pos, int isSmall, int hasStarted, string &str)
     if (memo1[pos][isSmall][hasStarted] != -1) return memo1[pos][isSmall][hasStarted];
 
     int ans = 0, lim = str[pos] - '0';
-    if (isSmall) lim = 9;
+    if (isSmall) lim = 9; 
     for (int i = 0; i <= lim; i++) {
-        int val = dp1(pos + 1, isSmall | (i < lim), hasStarted | (i != 0), str);
-        if (hasStarted && i == 0) val += dp2(pos + 1, isSmall | (i < lim), str);
-        ans += val;
+        ans += dp1(pos + 1, isSmall | (i < lim), hasStarted | (i != 0), str);
+        if (hasStarted && i == 0) ans += dp2(pos + 1, isSmall | (i < lim), str);
     }
     return memo1[pos][isSmall][hasStarted] = ans;
 }
@@ -44,19 +44,20 @@ int dp1(int pos, int isSmall, int hasStarted, string &str)
 void init()
 {
     memset(memo1, -1, sizeof(memo1));
+    memset(memo2, -1, sizeof(memo2));
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    init();
-
+    string A, B;
     cin >> A >> B;
+    
+    init();
     cout << dp1(0, 0, 0, B) << endl;
     A = to_string(stoi(A) - 1);
 
     init();
     cout << dp1(0, 0, 0, A) << endl;
     return 0;
-
 }

@@ -12,10 +12,7 @@ Given A, B and X. How many integers between A and B have a digit sum equal to X.
 1 <= A <= B <= 1000000000, 1 <= x <= 90
 */
 
-string A, B;
-int x, memo[10][2][90];
-
-vector <int> ans;
+int x, memo[15][2][90];
 
 int dp(int pos, int isSmall, int digitSum, string &str)
 {
@@ -40,14 +37,17 @@ void init()
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    init();
-
+    string A, B;
     cin >> A >> B >> x;
-    cout << dp(0, 0, 0, B) << endl;
-    A = to_string(stoi(A) - 1);
-
+    
     init();
-    cout << dp(0, 0, 0, A) << endl;
+    int r = dp(0, 0, 0, B);
 
+    A = to_string(stoi(A) - 1);
+    init();
+    int l = dp(0, 0, 0, A);
+
+    cout << r << ' ' << l << endl;
+    cout << r - l << endl;
     return 0;
 }
