@@ -23,19 +23,19 @@ M3: 4 x 2
 Find out the minimum number of operation needed to multiply them.
 */
 
-int n, memo[sz][sz], dim[sz + 2];
+int memo[sz][sz], dim[sz + 2];
 
-int mcm(int left, int right)
+int mcm(int i, int j)
 {
-    if (left == right) return 0;
-    if (memo[left][right] != -1) return memo[left][right];
+    if (i == j) return 0;
+    if (memo[i][j] != -1) return memo[i][j];
 
-    int ans = inf;
-    for (int i = left; i < right; i++) {
-        int val = mcm(left, i) + mcm(i + 1, right) + dim[left - 1] * dim[i] * dim[right];
-        ans = min(ans, val);
+    int mn = INT_MAX;
+    for (int k = i; k < j; k++) {
+        int val = mcm(i, k) + mcm(k + 1, j) + dim[i - 1] * dim[k] * dim[j];
+        mn = min(mn, val);
     }
-    return memo[left][right] = ans;
+    return memo[i][j] = mn;
 }
 
 void init()
@@ -46,11 +46,12 @@ void init()
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    init();
+    int n;
 
     cin >> n;
     for (int i = 0; i <= n; i++) cin >> dim[i];
-    cout << mcm(1, n) << endl;
 
+    init();
+    cout << "Minimum calculation needed = " << mcm(1, n) << endl;
     return 0;
 }

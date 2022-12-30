@@ -8,7 +8,7 @@
 using namespace std;
 
 /**
-Given an valid rthmetic expession which consists of only digits, '+' or '*'.
+Given an valid arithmetic expession which consists of only digits, '+' or '*'.
 You can insert brackets to maximize the expression. Print the maximum score
 you can get.
 
@@ -23,6 +23,25 @@ void init()
     memset(memo, -1, sizeof(memo));
 }
 
+int do_op(char op, int a, int b)
+{
+    switch (op)
+    {
+    case '+':
+        return a + b;
+        break;
+    case '-':
+        return a - b;
+        break;
+    case '*':
+        return a * b;
+        break;
+    case '/':
+        return a / b;
+        break;
+    }
+}
+
 int dp(int left, int right)
 {
     if (left == right) return s[left] - '0';
@@ -33,10 +52,7 @@ int dp(int left, int right)
         if (s[i] >= '0' && s[i] <= '9') continue;
         int val1 = dp(left, i-1);
         int val2 = dp(i + 1, right);
-        int val;
-
-        if (s[i] == '+') val = val1 + val2;
-        else val = val1 * val2;
+        int val = do_op(s[i], val1, val2);
         ans = max(val, ans);
     }
     return memo[left][right] = ans;
@@ -45,10 +61,8 @@ int dp(int left, int right)
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    init();
-
     cin >> s;
+    init();
     cout << dp(0, s.size() - 1) << endl;
-
     return 0;
 }

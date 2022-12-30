@@ -8,7 +8,7 @@
 using namespace std;
 
 /**
-Given an valid rthmetic expession which consists of only digits, '+' or '*'.
+Given an valid arithmetic expession which consists of only digits, '+' or '*'.
 You can insert brackets to maximize the expression. Print the maximum score
 you can get.
 
