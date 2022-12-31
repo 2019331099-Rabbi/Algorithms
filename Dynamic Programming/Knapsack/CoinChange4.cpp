@@ -27,11 +27,8 @@ void init()
 
 int coinChange(int pos, int amount)
 {
-    if (pos == n) {
-        if (amount == 0) return 1;
-        else return 0;
-    }
-    if (amount == 0) return 1;
+    if (amount < 0) return 0;
+    if (pos == n) return amount == 0;
     if (memo[pos][amount] != -1) return memo[pos][amount];
 
     int val = 0;

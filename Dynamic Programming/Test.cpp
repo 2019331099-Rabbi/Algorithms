@@ -1,84 +1,50 @@
 #include <bits/stdc++.h>
 #define endl '\n'
 #define PI acos(-1)
-#define sz 12
+#define sz 1000
 #define inf 1e9 + 9
 #define mod 1000000007
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
 /**
-Given an valid arithmetic expession which consists of only digits, '+' or '*'.
-You can insert brackets to maximize the expression. Print the maximum score
-you can get.
+--------------Coin Change Variation 1-------------------
+Suppose you have n coins. The value of the coins can be expressed by
+C0, C1, C2......Cn - 1. You are given an amount W. Now figure out the minimum
+number of coins you need to make the total amout equal to W.
+NB: Every coin can be used only once.
 
-Example: 2+3*4+7*1
+5 22
+2 5 9 13 15
+
+5 30
+2 5 9 13 15
 */
 
-string s;
-int memo[sz][sz][2];
+int n, w, weight[sz], profit[sz], memo[sz][sz];
 
 void init()
 {
     memset(memo, -1, sizeof(memo));
 }
 
-int do_op(char op, int a, int b)
+int knapsack(int pos, int capacity)
 {
-    switch (op)
-    {
-    case '+':
-        return a + b;
-        break;
-    case '-':
-        return a - b;
-        break;
-    case '*':
-        return a * b;
-        break;
-    case '/':
-        return a / b;
-        break;
-    }
-}
+    if (capacity < 0) return -inf;
+    if (pos == n) return 0;
 
-int dp(int left, int right, bool isMax)
-{
-    if (left == right) return s[left] - '0';
-    if (memo[left][right][isMax] != -1) return memo[left][right][isMax];
-
-    int ans = (isMax)?INT_MIN:INT_MAX;
-
-    for (int i = left; i <= right; i++) {
-        if (s[i] >= '0' && s[i] <= '9') continue;
-
-        int val, val1, val2;
-        if (s[i] == '+' || s[i] == '*') {
-            val1 = dp(left, i - 1, isMax);
-            val2 = dp(i + 1, right, isMax);
-        }
-        else {
-            if (isMax) {
-                val1 = dp(left, i - 1, 1);
-                val2 = dp(i + 1, right, 0);
-            }
-            else {
-                val1 = dp(left, i - 1, 0);
-                val2 = dp(i + 1, right, 1);
-            }
-        }
-        val = do_op(s[i], val1, val2);
-        ans = (isMax)?max(ans, val):min(ans, val);
-    }
-    return memo[left][right][isMax] = ans;
+    int val1 = knapsack(pos + 1, capacity);
+    int val2 = profit[pos] + knapsack(pos + 1, capacity - weight[pos]);
+    return max(val1, val2);
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
+    cin >> n >> w;
+    for (int i = 0; i < n; i++) cin >> weight[i];
+    for (int i = 0; i < n; i++) cin >> profit[i];
 
-    cin >> s;
-    init();
-    cout << dp(0, s.size() - 1, true) << endl;
+    cout << knapsack(0, w) << endl;
     return 0;
 }

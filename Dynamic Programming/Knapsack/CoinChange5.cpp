@@ -39,8 +39,8 @@ void init()
 
 int64_t coinChange(int pos, int amount)
 {
+    if (amount < 0) return 0;
     if (pos == n) return amount == 0;
-    if (amount == 0) return 1;
     if (memo[pos][amount] != -1) return memo[pos][amount];
 
     int64_t val = 0;
@@ -48,7 +48,7 @@ int64_t coinChange(int pos, int amount)
     int sum = 0;
     for (int i = 0; i < freq[pos]; i++) {
         sum += coin[pos];
-        if (amount - sum >= 0) val = (val + coinChange(pos + 1, amount - sum)) % mod;
+        val = (val + coinChange(pos + 1, amount - sum)) % mod;
     }
     return memo[pos][amount] = val;
 }
