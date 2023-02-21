@@ -94,17 +94,17 @@ int main()
 
     int n, T, l, r;
     ///sieve, prime factorization, Total divisors, Sum of all divisors part
-    cin >> T;
-    while (T--) {
-        cin >> n;
-        facotrs(n);
-    }
+    // cin >> T;
+    // while (T--) {
+    //     cin >> n;
+    //     facotrs(n);
+    // }
 
     ///Segmented sieve part
-//    cin >> T;
-//    while (T--) {
-//        cin >> l >> r;
-//        segsiv(l, r);
-//    }
-//    return 0;
+   cin >> T;
+   while (T--) {
+       cin >> l >> r;
+       segsiv(l, r);
+   }
+   return 0;
 }

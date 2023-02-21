@@ -1,86 +1,69 @@
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <cstdio>
-#include <cmath>
-#include <cstring>
-#include <cstdlib>
+#include <bits/stdc++.h>
 #define endl '\n'
-#define ll long long
-#define pb push_back
-#define pi 3.14159265358979323846264338327950288419716939937510
+#define PI acos(-1)
+#define sz 101
+#define inf 2000000000
+#define mod 100000000
 #define RUN_FAST ios::sync_with_stdio(false);
-#define sz 32000
 using namespace std;
 
-bool siv[sz];
+// int64_t row4[]={0, 1, 0, -1};
+// int64_t col4[]={1, 0, -1, 0};
+ 
+//int64_t row8[]={0, 0, -1, 1, 1, -1, -1, 1};///8 adjacent
+//int64_t col8[]={1, -1, 0, 0, 1, 1, -1, -1};
+ 
+//int64_t rowkt[]={-2, -2, 2, 2, -1, -1, 1, 1};///Knight moves on
+//int64_t colkt[]={1, -1, 1, -1, 2, -2, 2, -2};///chess board
+
+bool siv[sz + 1];
 vector <int> primes;
 
-//bool isprime(int n)
-//{
-//    bool flag=siv[n];
-//    if (n<2) return true;
-//    if (n==2) return false;
-//    if (n%2==0) return true;
-//    return flag;
-//}
-
-void chk()
+void gen_p()
 {
-    int i, j, limit=sqrt(sz+1);
-    for (i=3; i<=limit; i+=2) {
+    for (int i = 3; i * i <= sz; i += 2) {
         if (!siv[i]) {
-            for (j=i*i; j<=sz; j+=i+i)
-                siv[j]=true;
+            for (int j = i * i; j <= sz; j += i + i) siv[j] = true;
         }
     }
     primes.push_back(2);
-    for (i=3; i<sz; i+=2) {
-        if (!siv[i]) primes.push_back(i);
-    }
+    for (int i = 3; i <= sz; i += 2) if (!siv[i]) primes.push_back(i);
 }
 
-void segsiv(ll l, ll r)
+vector <int> segSiv(int l, int r)
 {
-    ll tmp, tmp1=r-l+1, limit, i, j, tmp2;
-    bool seg[tmp1]={false};
-    limit=sqrt(r+1);
-    for (i=0; primes[i]<=limit; i++) {
-        tmp=primes[i];
-        tmp2=(l/tmp)*tmp;
-        if (tmp2<l) tmp2+=tmp;
-        //cout << tmp2 << ' ' << tmp << endl;
-        //cout << tmp << ' ' << tmp2 << endl;
-        for (j=tmp2; j<=r; j+=tmp) {
-            seg[j-l]=true;
-//            cout << j << ' ' << j-l << ' ';
-        }
-//        cout << endl;
-//        for (int k=0; k<tmp1; k++) cout << seg[k] << ' ';
-//        cout << endl;
-        if (tmp2==tmp) seg[tmp-l]=false;
-    }
-    if (l==1) seg[0]=true;
-//    for (int k=0; k<tmp1; k++) cout << seg[k] << ' ';
-//        cout << endl;
+    int len = r - l + 1;
+    int seg[len] = {false};
 
-    for (i=0; i<tmp1; i++) {
-        if (!seg[i]) cout << l+i << endl;
+    for (int i = 0; primes[i] * primes[i] <= r; i++) {
+        int p = primes[i];
+        int strt = (l / p) * p;
+        if (strt < l) strt += p;
+        for (int j = strt; j <= r; j += p) seg[j - l] = true;
+        if (strt == p) seg[p - l] = false;
     }
+    if (l == 1) seg[0] = true;
+    vector <int> v;
+    for (int i = 0; i < len; i++) if (!seg[i]) v.push_back(i + l);
+    return v;
+}
+
+void solve(int T)
+{
+    int l, r;
+
+    cin >> l >> r;
+    vector <int> segP = segSiv(l, r);
+    for (auto xx: segP) cout << xx << ' ';
     cout << endl;
 }
 
 int main()
 {
-    RUN_FAST;
-    chk();
+    RUN_FAST; cin.tie(nullptr);
+    gen_p();
     int T;
-    ll l, r;
     cin >> T;
-    while (T--) {
-        cin >> l >> r;
-        segsiv(l, r);
-    }
+    for (int i = 1; i <= T; i++) solve(i);
     return 0;
 }
