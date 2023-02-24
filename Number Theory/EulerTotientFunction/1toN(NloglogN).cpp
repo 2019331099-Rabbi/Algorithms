@@ -36,15 +36,17 @@ void phi_1toN()
 
 int main()
 {
-    RUN_FAST; //cin.tie(nullptr);
+    RUN_FAST; cin.tie(nullptr);
     phi_1toN();
 
-    int T, n;
+    for (int i = 2; i <= 10; i++) cout << "Totient of " << i << " is " << phi[i] << endl;
 
-    cin >> T;
-    while (T--) {
-        cin >> n;
-        cout << "Totient of " << n << " is " << phi[n] << endl;
-    }
-    return 0;
+    // int T, n;
+
+    // cin >> T;
+    // while (T--) {
+    //     cin >> n;
+    //     cout << "Totient of " << n << " is " << phi[n] << endl;
+    // }
+    // return 0;
 }

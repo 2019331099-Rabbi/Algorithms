@@ -39,9 +39,9 @@ int main()
 {
     RUN_FAST; cin.tie(nullptr);
 
-    int n;
-    cin >> n;
-    cout << "Totient of " << n << " is " << phi(n) << endl;
+    // int n;
+    // cin >> n;
+    for (int i = 2; i <= 10; i++) cout << "Totient of " << i << " is " << phi(i) << endl;
 
     return 0;
 }

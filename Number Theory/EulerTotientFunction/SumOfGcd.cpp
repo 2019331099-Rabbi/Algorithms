@@ -34,8 +34,6 @@ void phi_1toN()
     }
 }
 
-
-
 int gcd_sum(int n)
 {
     int i, d1, d2, res=0;
@@ -54,6 +52,8 @@ int main()
 {
     RUN_FAST; //cin.tie(nullptr);
     phi_1toN();
+    for (int i = 1; i <= 12; i++) cout << i << ' ' << phi[i] << endl;
+    cout << endl;
 
     int T, n;
 
