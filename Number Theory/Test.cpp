@@ -16,89 +16,43 @@ using namespace std;
 //int64_t rowkt[]={-2, -2, 2, 2, -1, -1, 1, 1};///Knight moves on
 //int64_t colkt[]={1, -1, 1, -1, 2, -2, 2, -2};///chess board
 
-bool siv[sz + 1];
-vector <int> primes;
+int phi[sz + 1];
 
-void gen_p()
+void phi1ton()
 {
-    for (int i = 3; i * i <= sz; i += 2) {
-        if (!siv[i]) {
-            for (int j = i * i; j <= sz; j += i + i) siv[j] = true;
+    for (int i = 1; i < sz; i++) phi[i] = i;
+    
+    for (int i = 2; i < sz; i++) {
+        if (phi[i] == i) {
+            for (int j = i; j < sz; j += i) phi[j] /= i, phi[j] *= (i - 1);
         }
     }
-    primes.push_back(2);
-    for (int i = 3; i <= sz; i += 2) if (!siv[i]) primes.push_back(i);
 }
 
-vector <pair <int, int>> pFactors(int n)
-{
-    vector <pair <int, int>> factors;
-    for (int i = 0; primes[i] * primes[i] <= n; i++) {
-        int p = primes[i], cnt = 0;
-        while (n % p == 0) {
-            n /= p;
-            cnt++;
-        }
-        if (cnt > 0) factors.push_back({p, cnt});
-    }
-    if (n > 1) factors.push_back({n, 1});
-    return factors;
-}
-
-int totalDiv(int n)
-{
-    vector <pair <int, int>> factors = pFactors(n);
-
-    int tot = 1;
-    for (auto xx: factors) tot *= (xx.second + 1);
-    return tot;
-}
-
-int Pow(int b, int p)
-{
-    if (!p) return 1;
-    if (p & 1) return b * Pow(b, p - 1);
-    int tmp = Pow(b, p / 2);
-    return tmp * tmp;
-}
-
-int sumDiv(int n)
-{
-    vector <pair <int, int>> factors = pFactors(n);
-    int sum = 1;
-
-    for (auto xx: factors) {
-        int b = xx.first;
-        int p = xx.second;
-        int tmp = Pow(b, p + 1);
-        sum *= (tmp - 1) / (b - 1);
-    }
-    return sum;
-}
-
-void solve(int T)
+void solve()
 {
     int n;
     cin >> n;
 
-    vector <pair <int, int>> factors = pFactors(n);
-    cout << "Prime factorization of " << n << endl;
-    for (auto xx: factors) cout << xx.first << ' ' << xx.second << endl;
-
-    cout << "Total divisors of " << n << " = " << totalDiv(n) << endl;
-    cout << "Sum of divisors of " << n << " = " << sumDiv(n) << endl;
-
-    cout << endl;
-
+    int sum = 0;
+    for (int i = 1; i*i <= n; i++) {
+        if (n % i == 0) {
+            int d1 = i;
+            int d2 = n / i;
+            sum += d1 * phi[n / d1];
+            if (d1 != d2) sum += d2 * phi[n / d2];
+        }
+    }
+    cout << sum << endl;
 }
+
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    gen_p();
-
+    phi1ton();
     int T;
     cin >> T;
-    for (int i = 1; i <= T; i++) solve(i);
+    while (T--) solve();
     return 0;
 }

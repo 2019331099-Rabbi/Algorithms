@@ -56,6 +56,8 @@ int totalDiv(int n)
     return tot;
 }
 
+
+
 int Pow(int b, int p)
 {
     if (!p) return 1;
