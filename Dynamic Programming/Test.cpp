@@ -7,32 +7,27 @@
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
-int64_t memo[sz], arr[sz];
+int n, w, arr[sz];
 
-void init()
+int coinChange(int pos, int amount)
 {
-    memset(memo, -1, sizeof(memo));
-}
-
-int64_t maxSum(int n)
-{
-    if (n < 0) return 0;
-    if (memo[n] != -1) return memo[n];
-    int64_t val1 = maxSum(n - 1);
-    int64_t val2 = arr[n] + maxSum(n - 2);
-    return memo[n] = max(val1, val2);
+    if (amount < 0) return inf;
+    if (pos == n) {
+        if (amount == 0) return 0;
+        else return inf;
+    }
+    int cnt1 = 1 + coinChange(pos + 1, amount - arr[pos]);
+    int cnt2 = coinChange(pos + 1, amount);
+    return min(cnt1, cnt2);
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    init();
 
-    int n;
-    cin >> n;
+    cin >> n >> w;
     for (int i = 0; i < n; i++) cin >> arr[i];
-    cout << maxSum(n - 1) << endl;
 
-    return 0;
+    cout << coinChange(0, w) << endl;
 
 }

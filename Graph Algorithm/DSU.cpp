@@ -53,7 +53,12 @@ int main()
     while (edges--) {
         cin >> u >> v;
         union_set(u, v);
+        // cout << u << "->" << v << endl;
+        
+        // cout << endl;
     }
+    for (int i = 1; i <= nodes; i++) cout << i << ' ' << par[i] << endl;
+
     bool vis[sz]={false};
     cnt=0;
     for (i=1; i<=nodes; i++) {
