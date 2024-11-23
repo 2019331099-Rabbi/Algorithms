@@ -13,20 +13,20 @@ You are given an array of integers. Find the longest increasing subsequence of t
 Test Cases
 7
 3 4 -1 0 6 2 3
-OutPut: 4
+output: 4
 */
 
-int LIS(int n, int arr[])
+int LIS(int n, vector <int> &arr)
 {
-    int lis[n];
-    for (int i = 0; i < n; i++) lis[i] = 1;
-
+    vector <int> lis(n, 1);
+    // Each element in the array represents the length of the LIS ending at that index
+    
     for (int i = 1; i < n; i++) {
         for (int j = 0; j < i; j++) {
             if (arr[i] > arr[j]) lis[i] = max(lis[i], lis[j] + 1);
         }
     }
-    return *max_element(lis, lis + n);
+    return *max_element(lis.begin(), lis.end());
 }
 
 int main()
@@ -34,8 +34,8 @@ int main()
     RUN_FAST; cin.tie(nullptr);
     int n;
     cin >> n;
-    int arr[n];
-    for (int i = 0; i < n; i++) cin >> arr[i];
+    vector <int> arr(n);
+    for (auto &xx: arr) cin >> xx;
     cout << LIS(n, arr) << endl;
 
     return 0;
