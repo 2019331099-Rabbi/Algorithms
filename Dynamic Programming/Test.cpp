@@ -7,27 +7,47 @@
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
-int n, w, arr[sz];
+/**
+--------------0/1 knapsack-------------------
+Given weights and profits of n items, put these items in a knapsack of capacity W to get
+the maximum total profit in the knapsack.
 
-int coinChange(int pos, int amount)
+3 50
+10 20 30
+60 100 120
+
+Expalanation
+W = 50
+item weight profit
+1      10    60
+2      20    100
+3      30    120
+*/
+
+int memo[sz][sz];
+
+int maxProfit(int pos, int w, vector <int> &weights, vector <int> &profits)
 {
-    if (amount < 0) return inf;
-    if (pos == n) {
-        if (amount == 0) return 0;
-        else return inf;
-    }
-    int cnt1 = 1 + coinChange(pos + 1, amount - arr[pos]);
-    int cnt2 = coinChange(pos + 1, amount);
-    return min(cnt1, cnt2);
+    if (w < 0) return -inf;
+    if (pos == weights.size()) return 0;
+    
+    int profit1 = maxProfit(pos + 1, w, weights, profits);
+    int profit2 = profits[pos] + maxProfit(pos + 1, w - weights[pos], weights, profits);
+    return max(profit1, profit2);
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-
+    
+    int n, w;
     cin >> n >> w;
-    for (int i = 0; i < n; i++) cin >> arr[i];
+    
+    vector <int> weights(n), profits(n);
+    for (auto &weight: weights) cin >> weight;
+    for (auto &profit: profits) cin >> profit;
 
-    cout << coinChange(0, w) << endl;
-
+    memset(memo, -1, sizeof(memo));
+    cout << maxProfit(0, w, weights, profits) << endl;
+    return 0;
 }
