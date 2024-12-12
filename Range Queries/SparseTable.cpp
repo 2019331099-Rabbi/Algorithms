@@ -3,58 +3,52 @@
 #define PI acos(-1)
 #define sz 200010
 #define inf 1000000009
-#define mod 1000000009
+#define mod 100000000
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
 /*
-Sparse table. Solves static RMQ problem (without element changes).
-O(NlogN) on precomputation, O(1) on minimum query.
-
-Based on the problem RMQSQ from SPOJ.com:
-https://cses.fi/problemset/task/1647/
-
-Tutorial: https://youtu.be/c5O7E_PDO4U?si=J0jZrjjsc0ObiL6s
-
-
-nums = {3, 2, 4, 5, 1, 1, 5, 3};
-queries = {
-    {2, 4},
-    {5, 6},
-    {1, 8},
-    {3, 3}
-};
-
-Expected outpur:
-2
-1
-1
-4
+Problem link: https://cses.fi/problemset/task/1651/
 */
 
-
-int logs[sz];
-int sptable[18][sz];
-
-void computeLogs(int n)
+void computeLogs(vector <int> &logs)
 {
-    logs[1] = 0;
-    for (int i = 2; i <= n; i++) logs[i] = logs[i / 2] + 1;
+    int n = logs.size();
+    logs[0] = logs[1] = 0;
+    for (int i = 2; i < n; i++) logs[i] = logs[i/2]+1;
 }
 
-void buildTable(int n)
+void buildTable(vector <int> &nums, vector <int> &logs, vector <vector <int>> &sptable)
 {
-    for (int i = 1; i <= logs[n]; i++) {
-        for (int j = 0; j + (1 << i) <= n; j++) {
-            sptable[i][j] = min(sptable[i - 1][j], sptable[i - 1][j + (1 << (i - 1))]);
+    int n = nums.size();
+    for (int i = 0; i < n; i++) sptable[i][0] = nums[i];
+    for (int j = 1; j <= logs[n]; j++) {
+        for (int i = 0; i+(1<<j) <= n; i++) {
+            sptable[i][j] = min(sptable[i][j-1], sptable[i+(1<<(j-1))][j-1]);
         }
     }
 }
 
-int rmq(int l, int r)
+int rmq(int left, int right, vector <int> &logs, vector <vector <int>> &sptable)
 {
-    int p = logs[r - l + 1];
-    return min(sptable[p][l], sptable[p][r - (1 << p) + 1]);
+    int p = logs[right - left + 1];
+    return min(sptable[left][p], sptable[right - (1<<p) + 1][p]);
+}
+
+void sparseTable(vector <int> &nums, vector <vector <int>> &queries)
+{
+    int n = nums.size();
+    vector <int> logs(n+1);
+    computeLogs(logs);
+
+    vector <vector <int>> sptable(n, vector <int>(logs[n] + 1));
+    buildTable(nums, logs, sptable);
+
+    for (auto &query: queries) {
+        int left = query[0] - 1;
+        int right = query[1] - 1;
+        cout << left << ' ' << right << ' ' << rmq(left, right, logs, sptable) << endl;
+    }
 }
 
 int main()
