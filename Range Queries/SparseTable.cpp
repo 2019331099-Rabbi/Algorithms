@@ -60,17 +60,13 @@ int rmq(int l, int r)
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    int n, q;
-
-    cin >> n >> q;
-    computeLogs(n);
-    for (int i = 0; i < n; i++) cin >> sptable[0][i];
-    buildTable(n);
-
-    int l, r;
-    while (q--) {
-        cin >> l >> r;
-        cout << rmq(l - 1, r - 1) << endl;
-    }
+    vector <int> nums = {3, 2, 4, 5, 1, 1, 5, 3};
+    vector <vector <int>> queries = {
+        {2, 4},
+        {5, 6},
+        {1, 8},
+        {3, 3}
+    };
+    sparseTable(nums, queries);
     return 0;
 }
