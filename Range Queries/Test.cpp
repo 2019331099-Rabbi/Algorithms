@@ -11,113 +11,56 @@ using namespace std;
 Problem link: https://cses.fi/problemset/task/1651/
 */
 
-struct info
+void computeLogs(vector <int> &logs)
 {
-    int64_t sum, prop;
-}tree[sz * 3];
-int64_t arr[sz];
+    int n = logs.size();
+    logs[0] = logs[1] = 0;
+    for (int i = 2; i < n; i++) logs[i] = logs[i/2]+1;
+}
 
-void push(int node, int l, int r)
+void buildTable(vector <int> &nums, vector <int> &logs, vector <vector <int>> &sptable)
 {
-    if (tree[node].prop == 0) return;
-
-    tree[node].sum += (r - l + 1) * tree[node].prop;
-    if (l != r) {
-        tree[node * 2].prop += tree[node].prop;
-        tree[node * 2 + 1].prop += tree[node].prop;
+    int n = nums.size();
+    for (int i = 0; i < n; i++) sptable[i][0] = nums[i];
+    for (int j = 1; j <= logs[n]; j++) {
+        for (int i = 0; i+(1<<j) <= n; i++) {
+            sptable[i][j] = min(sptable[i][j-1], sptable[i+(1<<(j-1))][j-1]);
+        }
     }
-    tree[node].prop = 0;
 }
 
-int64_t combine(int64_t lcResult, int64_t rcResult)
+int rmq(int left, int right, vector <int> &logs, vector <vector <int>> &sptable)
 {
-    return lcResult + rcResult;
+    int p = logs[right - left + 1];
+    return min(sptable[left][p], sptable[right - (1<<p) + 1][p]);
 }
 
-void pull(int node)
+void sparseTable(vector <int> &nums, vector <vector <int>> &queries)
 {
-    int a = node << 1;//Left child: node * 2
-    int b = (node << 1) | 1;//Right child: (node * 2) + 1
-    tree[node].sum = combine(tree[a].sum, tree[b].sum);
-}
+    int n = nums.size();
+    vector <int> logs(n+1);
+    computeLogs(logs);
 
-void init(int node, int l, int r)
-{
-    if (l == r) {
-        tree[node].sum = arr[l];
-        return;
+    vector <vector <int>> sptable(n, vector <int>(logs[n] + 1));
+    buildTable(nums, logs, sptable);
+
+    for (auto &query: queries) {
+        int left = query[0] - 1;
+        int right = query[1] - 1;
+        cout << left << ' ' << right << ' ' << rmq(left, right, logs, sptable) << endl;
     }
-
-    int a = node * 2;
-    int b = a + 1;
-    int m = (l + r) >> 1;
-
-    init(a, l, m);
-    init(b, m + 1, r);
-    tree[node].sum = combine(tree[a].sum, tree[b].sum);
-}
-
-void update(int node, int l, int r, int x, int y, int64_t val)
-{
-    /*
-    [l, r] -> Currently where we are
-    [x, y] -> The range we want to update
-    val -> The value we want to add with everyone in [x, y] range
-
-    */
-    push(node, l, r);//Update the propagation value
-    if (r < x || l > y) return;
-    if (l >= x && r <= y) {
-        tree[node].prop += val;
-        push(node, l, r);
-        return;
-    }
-
-    int a = node << 1;//Left child: node * 2
-    int b = (node << 1) | 1;//Right child: (node * 2) + 1
-    int m = (l + r) >> 1;
-
-    update(a, l, m, x, y, val);
-    update(b, m + 1, r, x, y, val);
-    pull(node);//Update the node with it's left child and right child
-}
-
-int64_t query(int node, int l, int r, int x, int y)
-{
-    push(node, l, r);
-    if (r < x || l > y) return 0;
-    if (l >= x && r <= y) return tree[node].sum;
-
-    int a = node * 2;
-    int b = a + 1;
-    int m = (l + r) >> 1;
-    return combine(query(a, l, m, x, y), query(b, m + 1, r, x, y));
-    //Combine the left child and right child result
 }
 
 int main()
 {
     RUN_FAST; cin.tie(nullptr);
-    int n, q;
- 
-    cin >> n >> q;
-    for (int i = 1; i <= n; i++) cin >> arr[i];
-    init(1, 1, n);
- 
-    while (q--) {
-        int c;
-        cin >> c;
-        if (c == 2) {
-            int k;
-            cin >> k;
-            cout << query(1, 1, n, k, k) << endl;
-        }
-        else {
-            int a, b;
-            int64_t val;
-            cin >> a >> b >> val;
-            update(1, 1, n, a, b, val);
-        }
-    }
+    vector <int> nums = {3, 2, 4, 5, 1, 1, 5, 3};
+    vector <vector <int>> queries = {
+        {2, 4},
+        {5, 6},
+        {1, 8},
+        {3, 3}
+    };
+    sparseTable(nums, queries);
     return 0;
 }

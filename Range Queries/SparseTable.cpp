@@ -7,13 +7,30 @@
 #define RUN_FAST ios::sync_with_stdio(false);
 using namespace std;
 
-/**
- * Sparse table. Solves static RMQ problem (without element changes).
- * O(NlogN) on precomputation, O(1) on minimum query.
- *
- * Based on the problem RMQSQ from SPOJ.com:
- * https://cses.fi/problemset/task/1647/
- */
+/*
+Sparse table. Solves static RMQ problem (without element changes).
+O(NlogN) on precomputation, O(1) on minimum query.
+
+Based on the problem RMQSQ from SPOJ.com:
+https://cses.fi/problemset/task/1647/
+
+Tutorial: https://youtu.be/c5O7E_PDO4U?si=J0jZrjjsc0ObiL6s
+
+
+nums = {3, 2, 4, 5, 1, 1, 5, 3};
+queries = {
+    {2, 4},
+    {5, 6},
+    {1, 8},
+    {3, 3}
+};
+
+Expected outpur:
+2
+1
+1
+4
+*/
 
 
 int logs[sz];
