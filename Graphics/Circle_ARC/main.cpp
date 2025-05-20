@@ -1,0 +1,152 @@
+#include<windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdlib.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+int xmin = -400, xmax = 400;
+int ymin = -400, ymax = 400;
+
+struct Point {
+    int x;
+    int y;
+    Point(int _x, int _y) {
+        x = _x;
+        y = _y;
+    }
+};
+
+long double slope(Point p1, Point p2);
+void setPixel(Point p);
+void drawAxis();
+
+const double PI = 3.141592653589793;
+
+double toDegrees(double radians) {
+    return radians * 180.0 / PI;
+}
+
+bool isInAngleRange(double angle, double theta1, double theta2) {
+    return angle >= theta1 && angle <= theta2;
+}
+
+void findArcPoints(Point p, vector<Point>& points, double theta1, double theta2) {
+    vector<Point> sym = {
+        Point( p.x,  p.y),
+        Point(-p.x,  p.y),
+        Point(-p.x, -p.y),
+        Point( p.x, -p.y),
+        Point( p.y,  p.x),
+        Point(-p.y,  p.x),
+        Point(-p.y, -p.x),
+        Point( p.y, -p.x)
+    };
+
+    for (auto pt : sym) {
+        double angle = toDegrees(atan2(pt.y, pt.x));
+        if (angle < 0) angle += 360; // only needed if atan2 gives negatives
+
+        if (isInAngleRange(angle, theta1, theta2)) {
+            points.push_back(pt);
+        }
+    }
+}
+
+void bresenhamArcDrawing(Point center, int radius, double theta1, double theta2)
+{
+    int x = 0, y = radius;
+    int d = 3 - 2 * radius;
+
+    vector<Point> points;
+    while (x <= y) {
+        findArcPoints(Point(x, y), points, theta1, theta2);
+
+        if (d < 0)
+            d += 4 * x + 6;
+        else {
+            d += 4 * (x - y) + 10;
+            y--;
+        }
+        x++;
+    }
+
+    // Translate back to center and draw
+    for (auto& p : points) {
+        p.x += center.x;
+        p.y += center.y;
+        setPixel(p);
+    }
+}
+
+void display(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawAxis();
+    glColor3f(1.0, 1.0, 1.0);  // White
+
+    glBegin(GL_POINTS);
+
+    Point center = Point(0, 0);
+    int radius = 100;
+    double theta1 = 30.0, theta2 = 75.0;
+    bresenhamArcDrawing(center, radius, theta1, theta2);
+
+    glEnd();
+    glFlush();
+}
+
+void init(){
+    glClearColor(0.0,0.0,0.0,0.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(xmin, xmax, ymin, ymax, -10, 10);
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv);
+    glutInitWindowSize(1000, 1000);
+    glutInitWindowPosition(10,10);
+    glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+
+    glutCreateWindow("Demo");
+    init();
+    glutDisplayFunc(display);
+    glutMainLoop();
+
+    return EXIT_SUCCESS;
+}
+
+
+long double slope(Point p1, Point p2)
+{
+    return (long double)(p2.y - p1.y) / (long double)(p2.x - p1.x);
+}
+
+void setPixel(Point p)
+{
+
+    glVertex3f(p.x, p.y, 0.0);
+}
+
+void drawAxis()
+{
+    glColor3f(0.0, 1.0, 0.0);  // White color for axes
+    glBegin(GL_LINES);
+
+    // X-axis
+    glVertex2f(xmin, 0);
+    glVertex2f(xmax, 0);
+
+    // Y-axis
+    glVertex2f(0, ymin);
+    glVertex2f(0, ymax);
+
+    glEnd();
+}
